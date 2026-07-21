@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+@theme {
+  --color-rcsblue: #ff5733;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scrollbar-gutter: stable;
+}
+
+#page-shell {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+body.loaded #page-shell {
+  opacity: 1;
+  transform: none;
+}
+
+.loader-logo img,
+.logo img {
+  height: auto !important;
+}
