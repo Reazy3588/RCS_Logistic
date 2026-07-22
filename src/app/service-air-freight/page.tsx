@@ -317,6 +317,7 @@ export default function Page() {
                                     </div>
                                     <div className="col-md-6">
                                         <h3 className="mb-3">Why Choose Air Freight?</h3>
+                                        <p>Fast-track your global supply chain with premium air freight solutions. Designed for high-priority shipments, our air cargo services deliver speed, dependable flight schedules, and seamless customs clearance from origin to destination.</p>
                                         <ul className="check-list dark-text mt-4">
                                             <li><i className="fa-solid fa-check"></i><span>Best for time-sensitive cargo.</span></li>
                                             <li><i className="fa-solid fa-check"></i><span>Direct access to worldwide markets.</span></li>
@@ -329,7 +330,7 @@ export default function Page() {
                                 <h3 className="mb-4">How It Works</h3>
                                 <p className="mb-5">Our air cargo process is streamlined for speed and efficiency. We ensure your shipment moves quickly through every stage of the journey.</p>
 
-                                <div className="accordion" id="serviceAccordion">
+                                {/* <div className="accordion" id="serviceAccordion">
                                     <div className="accordion-item">
                                         <h2 className="accordion-header">
                                             <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true">
@@ -366,7 +367,7 @@ export default function Page() {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
 
                             </div>
                         </div>

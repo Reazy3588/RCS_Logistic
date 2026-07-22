@@ -284,7 +284,7 @@ export default function Page() {
                             </div>
 
                             <div className="service-detail-content">
-                                <h2 className="mb-4">Air Freight Product</h2>
+                                <h2 className="mb-4">Sea Freight Product</h2>
                                 <p>RCS Logistics Cambodia provides reliable sea freight solutions, including FCL, LCL, and buyer consolidation services, helping customers optimize export logistics from Cambodia to global markets.</p>
                                 <ul style={{ listStyleType: 'disc', paddingLeft: '13px' }}>
                                     <li>Door-to-door service for LCL and FCL</li>
@@ -302,20 +302,21 @@ export default function Page() {
                                         <Image src="/images/img(2).jpg" alt="Feature" className="img-fluid rounded img-vertical-height" unoptimized width={1920} height={1080} sizes="100vw" />
                                     </div>
                                     <div className="col-md-6">
-                                        <h3 className="mb-3">Why Choose Air Freight?</h3>
+                                        <h3 className="mb-3">Why Choose Sea Freight?</h3>
+                                        <p>Sea freight is the most cost-effective solution for moving large volumes, heavy cargo, and bulk goods globally. We offer flexible Full Container Load (FCL) and Less than Container Load (LCL) services to keep your supply chain efficient and reliable.</p>
                                         <ul className="check-list dark-text mt-4">
-                                            <li><i className="fa-solid fa-check"></i><span>Best for time-sensitive cargo.</span></li>
-                                            <li><i className="fa-solid fa-check"></i><span>Direct access to worldwide markets.</span></li>
-                                            <li><i className="fa-solid fa-check"></i><span>Low risk of damage or theft.</span></li>
-                                            <li><i className="fa-solid fa-check"></i><span>Highly dependable flight schedules.</span></li>
+                                            <li><i className="fa-solid fa-check"></i><span>Most Cost-Effective for Large & Heavy Cargo</span></li>
+                                            <li><i className="fa-solid fa-check"></i><span>Flexible FCL (Full Container) & LCL (Shared Container) Options</span></li>
+                                            <li><i className="fa-solid fa-check"></i><span>High Carrying Capacity for Worldwide Destinations</span></li>
+                                            <li><i className="fa-solid fa-check"></i><span>Eco-Friendly Transport with Lower Carbon Emissions</span></li>
                                         </ul>
                                     </div>
                                 </div>
 
                                 <h3 className="mb-4">How It Works</h3>
-                                <p className="mb-5">Our air cargo process is streamlined for speed and efficiency. We ensure your shipment moves quickly through every stage of the journey.</p>
+                                <p className="mb-5">Our ocean freight service is structured for end-to-end efficiency—from port pickup and container loading to customs clearance and final port-to-door delivery.</p>
 
-                                <div className="accordion" id="serviceAccordion">
+                                {/* <div className="accordion" id="serviceAccordion">
                                     <div className="accordion-item">
                                         <h2 className="accordion-header">
                                             <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true">
@@ -352,7 +353,7 @@ export default function Page() {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
 
                             </div>
                         </div>
