@@ -11,11 +11,12 @@
 // export default nextConfig;
 
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
+
+const withNextIntl = createNextIntlPlugin("./src/i18n.ts");
 
 const nextConfig: NextConfig = {
-  images: {
-    unoptimized: true,
-  },
+  images: { unoptimized: true },
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);

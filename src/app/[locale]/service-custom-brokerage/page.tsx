@@ -1,24 +1,37 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { useLocale, useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = {
-    title: "RCS LOGISTICS CAMBODIA LTD",
-    description: "LOGISTICS FOR A GLOBAL ECONOMY",
-};
+export async function generateMetadata({
+    params
+}: {
+    params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+    const { locale } = await params;
+    const t = await getTranslations({ locale, namespace: "customsBrokerage" });
+    return {
+        title: `${t("pageTitle")} - RCS Logistics Cambodia`,
+        description: t("productDesc1")
+    };
+}
 
 export default function Page() {
+    const t = useTranslations("customsBrokerage");
+    const locale = useLocale();
+    const withLocale = (path: string) => `/${locale}${path}`;
     return (
         <>
             <section className="page-header" style={{ backgroundImage: "url('/images/img(11).jpg')" }}>
                 <div className="container page-header-content">
-                    <h1 className="page-title">Project Cargo</h1>
+                    <h1 className="page-title">{t("pageTitle")}</h1>
                     <div className="breadcrumb">
-                        <Link href="/" >Home</Link>
+                        <Link href={withLocale("/")}>{t("breadcrumbHome")}</Link>
                         <span className="breadcrumb-icon"><i className="fa-solid fa-angle-right"></i></span>
-                        <Link href="/services" >Services</Link>
+                        <Link href={withLocale("/services")}>{t("breadcrumbServices")}</Link>
                         <span className="breadcrumb-icon"><i className="fa-solid fa-angle-right"></i></span>
-                        <span>Project Cargo</span>
+                        <span>{t("breadcrumbCustomsBrokerage")}</span>
                     </div>
                 </div>
             </section>
@@ -30,37 +43,35 @@ export default function Page() {
                         <h2 className="visually-hidden">Page Content</h2>
 
                         <div className="col-lg-4 mb-5 mb-lg-0 order-2 order-lg-1">
-
-
                             <div className="sidebar-widget">
-                                <h2 className="widget-title">All Services</h2>
+                                <h2 className="widget-title">{t("allServicesTitle")}</h2>
                                 <ul className="cat-list service-list-widget">
-                                    <li><Link href="/service-air-freight">Air Freight<i className="fa-solid fa-arrow-right"></i></Link></li>
-                                    <li><Link href="/service-sea-freight" >Sea Freight<i className="fa-solid fa-arrow-right"></i></Link></li>
-                                    <li><Link href="/service-warehouse" >Warehouse & Distribution<i className="fa-solid fa-arrow-right"></i></Link></li>
-                                    <li><Link href="/service-buyer-consolidation" >Bayer Consolidation<i className="fa-solid fa-arrow-right"></i></Link></li>
-                                    <li><Link href="/service-project-cargo" className="active">Project Cargo<i className="fa-solid fa-arrow-right"></i></Link></li>
-                                    <li><Link href="/service-custom-brokerage">Customs Brokerage<i className="fa-solid fa-arrow-right"></i></Link></li>
+                                    <li><Link href={withLocale("/service-air-freight")}>{t("navAirFreight")}<i className="fa-solid fa-arrow-right"></i></Link></li>
+                                    <li><Link href={withLocale("/service-sea-freight")}>{t("navSeaFreight")} <i className="fa-solid fa-arrow-right"></i></Link></li>
+                                    <li><Link href={withLocale("/service-warehouse")}>{t("navWarehouse")}<i className="fa-solid fa-arrow-right"></i></Link></li>
+                                    <li><Link href={withLocale("/service-buyer-consolidation")}>{t("navBuyerConsolidation")}<i className="fa-solid fa-arrow-right"></i></Link></li>
+                                    <li><Link href={withLocale("/service-project-cargo")}>{t("navProjectCargo")}<i className="fa-solid fa-arrow-right"></i></Link></li>
+                                    <li><Link href={withLocale("/service-custom-brokerage")} className="active">{t("navCustomsBrokerage")}<i className="fa-solid fa-arrow-right"></i></Link></li>
                                 </ul>
                             </div>
 
 
                             <div className="sidebar-widget">
-                                <h2 className="widget-title">Downloads</h2>
+                                <h2 className="widget-title">{t("downloadsTitle")}</h2>
                                 <div className="brochure-box">
                                     <a href="#" className="brochure-btn">
                                         <span className="icon"><i className="fa-regular fa-file-pdf"></i></span>
                                         <span className="text">
-                                            <span className="title">Service Brochure</span>
-                                            <span className="size">PDF, 2.5MB</span>
+                                            <span className="title">{t("brochureTitle")}</span>
+                                            <span className="size">{t("brochureSize")}</span>
                                         </span>
                                         <span className="download"><i className="fa-solid fa-download"></i></span>
                                     </a>
                                     <a href="#" className="brochure-btn mt-3">
                                         <span className="icon"><i className="fa-regular fa-file-word"></i></span>
                                         <span className="text">
-                                            <span className="title">Company Profile</span>
-                                            <span className="size">DOC, 1.2MB</span>
+                                            <span className="title">{t("companyProfileTitle")}</span>
+                                            <span className="size">{t("companyProfileSize")}</span>
                                         </span>
                                         <span className="download"><i className="fa-solid fa-download"></i></span>
                                     </a>
@@ -71,11 +82,10 @@ export default function Page() {
                             <div className="sidebar-widget p-0 overflow-hidden text-center position-relative">
                                 <Image src="/images/img(11).jpg" alt="Ad" className="img-fluid h-100 w-100" unoptimized width={1920} height={1080} sizes="100vw" />
                                 <div className="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center bg-dark bg-opacity-75 text-white p-4">
-
-                                    <h3>Need Help?</h3>
-                                    <p>Call us for any logistics questions.</p>
+                                    <h3>{t("needHelpTitle")}</h3>
+                                    <p>{t("needHelpDesc")}</p>
                                     <h3 className="mb-4 text-white">Tel: +(855) 23 883 886/887</h3>
-                                    <a href="#" className="btn btn-primary" data-hover="Contact Us">Contact Us</a>
+                                    <a href="/contact" className="btn btn-primary" data-hover={t("contactUsBtn")}>{t("contactUsBtn")}</a>
                                 </div>
                             </div>
 
@@ -88,27 +98,27 @@ export default function Page() {
                             </div>
 
                             <div className="service-detail-content">
-                                <h2 className="mb-4">Project Cargo Services</h2>
-                                <p>RCS Logistics Cambodia provides specialized Project Cargo Handling Services for oversized, heavy-lift, and complex shipments requiring customized logistics planning and execution.</p>
-                                <p>We support customers with professional solutions for transporting large-scale industrial and infrastructure cargo safely and efficiently within Cambodia and across international markets.</p>
+                                <h2 className="mb-4">{t("servicesTitle")}</h2>
+                                <p>{t("productDesc1")}</p>
+                                <p>{t("productDesc2")}</p>
                                 <div className="row my-5">
                                     <div className="col-md-6 mb-4 mb-md-0">
                                         <Image src="/images/img(12).jpg" alt="Feature" className="img-fluid h-100 rounded img-vertical-height" unoptimized width={1920} height={1080} sizes="100vw" />
                                     </div>
                                     <div className="col-md-6">
-                                        <h3 className="mb-3">Why Choose Project Cargo</h3>
-                                        <p>We provide end-to-end management for heavy-lift, oversized, and high-value cargo, handling complex route planning, specialized equipment, and regulatory permits for seamless project delivery.</p>
+                                        <h3 className="mb-3">{t("whyChooseTitle")}</h3>
+                                        <p>{t("whyChooseDesc")}</p>
                                         <ul className="check-list dark-text mt-4">
-                                            <li><i className="fa-solid fa-check"></i><span>Specialized Heavy-Lift & OOG Equipment</span></li>
-                                            <li><i className="fa-solid fa-check"></i><span>Comprehensive Feasibility & Route Surveys</span></li>
-                                            <li><i className="fa-solid fa-check"></i><span>Turnkey Logistics & Site-to-Site Transport</span></li>
-                                            <li><i className="fa-solid fa-check"></i><span>Regulatory Permits & Escort Coordination</span></li>
+                                            <li><i className="fa-solid fa-check"></i><span>{t("checkLicensed")}</span></li>
+                                            <li><i className="fa-solid fa-check"></i><span>{t("checkTariff")}</span></li>
+                                            <li><i className="fa-solid fa-check"></i><span>{t("checkDocumentation")}</span></li>
+                                            <li><i className="fa-solid fa-check"></i><span>{t("checkDuty")}</span></li>
                                         </ul>
                                     </div>
                                 </div>
 
-                                <h3 className="mb-4">How It Works</h3>
-                                <p className="mb-5">Our project cargo execution is built on meticulous engineering and planning, delivering heavy equipment and oversized shipments safely to your job site on schedule.</p>
+                                <h3 className="mb-4">{t("howItWorksTitle")}</h3>
+                                <p className="mb-5">{t("howItWorksDesc")}</p>
 
                                 {/* <div className="accordion" id="serviceAccordion">
                                     <div className="accordion-item">

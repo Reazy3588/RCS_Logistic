@@ -20,7 +20,7 @@ const clearTimers = (timers: Array<{ timer?: number; key: string }>, appState: R
 /** Throttle scroll events to 16ms (60fps) */
 const useThrottle = (callback: () => void, delay: number) => {
   const lastRun = useRef<number>(0);
-  
+
   return useCallback(() => {
     const now = Date.now();
     if (now - lastRun.current >= delay) {
@@ -105,9 +105,9 @@ export default function ClientEnhancements() {
   const hidePreloaderNow = useCallback(() => {
     const appState = appStateRef.current;
     if (!appState) return;
-    
+
     const sitePreloader = elementsRef.current.sitePreloader;
-    
+
     appState.__cargonzPreloaderActive = false;
     clearAllTimers();
 
@@ -119,12 +119,6 @@ export default function ClientEnhancements() {
       if (sitePreloader) {
         sitePreloader.style.display = "none";
       }
-      const mainNavigation = elementsRef.current.mainNavigation;
-      const menuToggleButton = elementsRef.current.menuToggleButton;
-      const extraWrap = elementsRef.current.extraWrap;
-      if (mainNavigation) mainNavigation.classList.remove("mobile-open");
-      if (menuToggleButton) menuToggleButton.classList.remove("active");
-      if (extraWrap) extraWrap.classList.remove("open");
       window.dispatchEvent(new Event("preloader:complete"));
       appState.__cargonzPreloaderFinalizeTimer = undefined;
     }, 900);
@@ -135,9 +129,9 @@ export default function ClientEnhancements() {
     const appState = appStateRef.current;
     if (!appState) return;
     if (appState.__cargonzPreloaderActive) return;
-    
+
     const sitePreloader = elementsRef.current.sitePreloader;
-    
+
     if (!sitePreloader) return;
 
     if (appState.__cargonzPreloaderFinalizeTimer) {
@@ -182,10 +176,10 @@ export default function ClientEnhancements() {
   const onDocumentClick = useCallback((event: MouseEvent) => {
     const appState = appStateRef.current;
     if (!appState) return;
-    
+
     const clickedElement = event.target as HTMLElement | null;
     const linkElement = clickedElement?.closest("a[href]") as HTMLAnchorElement | null;
-    
+
     if (!linkElement) return;
 
     const linkHref = linkElement.getAttribute("href") ?? "";
@@ -193,6 +187,16 @@ export default function ClientEnhancements() {
     const isSamePageHash = linkHref.startsWith("#");
     const isNewTab = linkElement.target === "_blank" || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
     const isSamePath = linkHref === pathname || linkHref === `${pathname}/`;
+
+    // Close mobile menu immediately when any nav link is clicked (before waiting for preloader)
+    const mainNavigation = elementsRef.current.mainNavigation;
+    const menuToggleButton = elementsRef.current.menuToggleButton;
+    if (mainNavigation?.classList.contains("mobile-open") && mainNavigation.contains(linkElement)) {
+      mainNavigation.classList.remove("mobile-open");
+      menuToggleButton?.classList.remove("active");
+      document.body.classList.remove("mobile-menu-open");
+      mainNavigation.querySelectorAll(".has-child.submenu-open").forEach((el) => el.classList.remove("submenu-open"));
+    }
 
     if (!isInternalLink || isSamePageHash || isNewTab) return;
     if (isSamePath) return;
@@ -205,7 +209,7 @@ export default function ClientEnhancements() {
   const updateStickyHeader = useCallback(() => {
     const headerElement = elementsRef.current.headerElement;
     if (!headerElement) return;
-    
+
     if (window.scrollY > 50) headerElement.classList.add("header-sticky");
     else headerElement.classList.remove("header-sticky");
   }, []);
@@ -213,14 +217,14 @@ export default function ClientEnhancements() {
   const updateProgress = useCallback(() => {
     const progressPathElement = elementsRef.current.progressPathElement;
     const progressWrapElement = elementsRef.current.progressWrapElement;
-    
+
     if (!progressPathElement) return;
 
     const pathLength = progressPathElement.getTotalLength();
     const scrollPosition = window.scrollY;
     const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
     const progressOffset = pathLength - (scrollPosition * pathLength) / Math.max(documentHeight, 1);
-    
+
     progressPathElement.style.strokeDashoffset = `${progressOffset}`;
 
     if (!progressWrapElement) return;
@@ -254,10 +258,10 @@ export default function ClientEnhancements() {
   const onMenuToggle = useCallback((event: Event) => {
     const menuToggleButton = elementsRef.current.menuToggleButton;
     const mainNavigation = elementsRef.current.mainNavigation;
-    
+
     if (!menuToggleButton || !mainNavigation) return;
     event.preventDefault();
-    
+
     mainNavigation.classList.toggle("mobile-open");
     menuToggleButton.classList.toggle("active");
     document.body.classList.toggle("mobile-menu-open", mainNavigation.classList.contains("mobile-open"));
@@ -360,7 +364,7 @@ export default function ClientEnhancements() {
 
     const swiperImport = await import("swiper/bundle");
     const Swiper = swiperImport.default as SwiperCtor;
-    
+
     if (!Swiper || isComponentDisposedRef.current) return;
 
     // Initialize testimonials slider
@@ -380,6 +384,27 @@ export default function ClientEnhancements() {
     if (homeHeroSliderElement && !homeHeroSliderElement.swiper) {
       new Swiper(".home-hero-slider", SWIPER_CONFIGS.hero);
     }
+  }, []);
+
+  const onSubmenuToggle = useCallback((event: MouseEvent) => {
+    const target = event.target as HTMLElement | null;
+    const button = target?.closest<HTMLButtonElement>(".submenu-toggle");
+    if (!button) return;
+
+    const li = button.closest<HTMLElement>(".has-child");
+    if (!li) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const isOpen = li.classList.contains("submenu-open");
+    const parentUl = li.parentElement;
+    if (parentUl) {
+      parentUl.querySelectorAll<HTMLElement>(":scope > li.has-child.submenu-open").forEach((el) => {
+        if (el !== li) el.classList.remove("submenu-open");
+      });
+    }
+    li.classList.toggle("submenu-open", !isOpen);
   }, []);
 
   useEffect(() => {
@@ -618,11 +643,13 @@ export default function ClientEnhancements() {
       else collapseShow(panel, trigger);
     };
 
+
     // Attach event listeners with passive flag for scroll events
     window.addEventListener("scroll", throttledStickyHeader, { passive: true });
     window.addEventListener("scroll", throttledProgress, { passive: true });
     document.addEventListener("click", onDocumentClick, true);
     document.addEventListener("click", onAccordionClick);
+    document.addEventListener("click", onSubmenuToggle);
 
     if (elements.progressWrapElement) {
       elements.progressWrapElement.addEventListener("click", onProgressClick);
@@ -661,6 +688,7 @@ export default function ClientEnhancements() {
       window.removeEventListener("scroll", throttledProgress);
       document.removeEventListener("click", onDocumentClick, true);
       document.removeEventListener("click", onAccordionClick);
+      document.removeEventListener("click", onSubmenuToggle);
 
       if (elements.progressWrapElement) {
         elements.progressWrapElement.removeEventListener("click", onProgressClick);
@@ -708,6 +736,7 @@ export default function ClientEnhancements() {
     onExtraWrapClose,
     onContactFormSubmit,
     onQuoteFormSubmit,
+    onSubmenuToggle,
     clearAllTimers,
     initSwipers,
   ]);

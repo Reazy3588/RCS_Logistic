@@ -165,15 +165,28 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { useLocale, useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = {
-    title: "RCS LOGISTICS CAMBODIA LTD",
-    description: "LOGISTICS FOR A GLOBAL ECONOMY",
-};
+export async function generateMetadata({
+    params
+}: {
+    params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+    const { locale } = await params;
+    const t = await getTranslations({ locale, namespace: "seaFreight" });
+    return {
+        title: `${t("pageTitle")} - RCS Logistics Cambodia`,
+        description: t("productDesc")
+    };
+}
 
 export default function Page() {
-    // Array for your 9 partner airline logo filenames
-    const airlineLogos = [
+    const t = useTranslations("seaFreight");
+    const locale = useLocale();
+    const withLocale = (path: string) => `/${locale}${path}`;
+
+    const shippingLineLogos = [
         { name: "CMA CGM", src: "/images/cma_cgm.png" },
         { name: "Hapag Lloyd", src: "/images/hapag_lloyd.png" },
         { name: "Oocl", src: "/images/oocl.png" },
@@ -187,13 +200,13 @@ export default function Page() {
         <>
             <section className="page-header" style={{ backgroundImage: "url('/images/img(9).jpg')" }}>
                 <div className="container page-header-content">
-                    <h1 className="page-title">Sea Freight</h1>
+                    <h1 className="page-title">{t("pageTitle")}</h1>
                     <div className="breadcrumb">
-                        <Link href="/">Home</Link>
+                        <Link href={withLocale("/")}>{t("breadcrumbHome")}</Link>
                         <span className="breadcrumb-icon"><i className="fa-solid fa-angle-right"></i></span>
-                        <Link href="/services">Services</Link>
+                        <Link href={withLocale("/services")}>{t("breadcrumbServices")}</Link>
                         <span className="breadcrumb-icon"><i className="fa-solid fa-angle-right"></i></span>
-                        <span>Sea Freight</span>
+                        <span>{t("breadcrumbSeaFreight")}</span>
                     </div>
                 </div>
             </section>
@@ -203,38 +216,35 @@ export default function Page() {
                     <div className="row">
                         <h2 className="visually-hidden">Page Content</h2>
 
-                        {/* ========================================================= */}
-                        {/* LEFT SIDEBAR (The partner section moves here!) */}
-                        {/* ========================================================= */}
                         <div className="col-lg-4 mb-5 mb-lg-0 order-2 order-lg-1">
                             <div className="sidebar-widget">
-                                <h2 className="widget-title">All Services</h2>
+                                <h2 className="widget-title">{t("allServicesTitle")}</h2>
                                 <ul className="cat-list service-list-widget">
-                                    <li><Link href="/service-air-freight">Air Freight<i className="fa-solid fa-arrow-right"></i></Link></li>
-                                    <li><Link href="/service-sea-freight" className="active">Sea Freight <i className="fa-solid fa-arrow-right"></i></Link></li>
-                                    <li><Link href="/service-warehouse">Warehouse & Distribution<i className="fa-solid fa-arrow-right"></i></Link></li>
-                                    <li><Link href="/service-buyer-consolidation">Buyer Consolidation<i className="fa-solid fa-arrow-right"></i></Link></li>
-                                    <li><Link href="/service-project-cargo">Project Cargo<i className="fa-solid fa-arrow-right"></i></Link></li>
-                                    <li><Link href="/service-custom-brokerage">Customs Brokerage<i className="fa-solid fa-arrow-right"></i></Link></li>
+                                    <li><Link href={withLocale("/service-air-freight")}>{t("navAirFreight")}<i className="fa-solid fa-arrow-right"></i></Link></li>
+                                    <li><Link href={withLocale("/service-sea-freight")} className="active">{t("navSeaFreight")} <i className="fa-solid fa-arrow-right"></i></Link></li>
+                                    <li><Link href={withLocale("/service-warehouse")}>{t("navWarehouse")}<i className="fa-solid fa-arrow-right"></i></Link></li>
+                                    <li><Link href={withLocale("/service-buyer-consolidation")}>{t("navBuyerConsolidation")}<i className="fa-solid fa-arrow-right"></i></Link></li>
+                                    <li><Link href={withLocale("/service-project-cargo")}>{t("navProjectCargo")}<i className="fa-solid fa-arrow-right"></i></Link></li>
+                                    <li><Link href={withLocale("/service-custom-brokerage")}>{t("navCustomsBrokerage")}<i className="fa-solid fa-arrow-right"></i></Link></li>
                                 </ul>
                             </div>
 
                             <div className="sidebar-widget">
-                                <h2 className="widget-title">Downloads</h2>
+                                <h2 className="widget-title">{t("downloadsTitle")}</h2>
                                 <div className="brochure-box">
                                     <a href="#" className="brochure-btn">
                                         <span className="icon"><i className="fa-regular fa-file-pdf"></i></span>
                                         <span className="text">
-                                            <span className="title">Service Brochure</span>
-                                            <span className="size">PDF, 2.5MB</span>
+                                            <span className="title">{t("brochureTitle")}</span>
+                                            <span className="size">{t("brochureSize")}</span>
                                         </span>
                                         <span className="download"><i className="fa-solid fa-download"></i></span>
                                     </a>
                                     <a href="#" className="brochure-btn mt-3">
                                         <span className="icon"><i className="fa-regular fa-file-word"></i></span>
                                         <span className="text">
-                                            <span className="title">Company Profile</span>
-                                            <span className="size">DOC, 1.2MB</span>
+                                            <span className="title">{t("companyProfileTitle")}</span>
+                                            <span className="size">{t("companyProfileSize")}</span>
                                         </span>
                                         <span className="download"><i className="fa-solid fa-download"></i></span>
                                     </a>
@@ -244,26 +254,24 @@ export default function Page() {
                             <div className="sidebar-widget p-0 overflow-hidden text-center position-relative mb-4">
                                 <Image src="/images/img(10).jpg" alt="Ad" className="img-fluid h-100 w-100" unoptimized width={1920} height={1080} sizes="100vw" />
                                 <div className="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center bg-dark bg-opacity-75 text-white p-4">
-                                    <h3>Need Help?</h3>
-                                    <p>Call us for any logistics questions.</p>
+                                    <h3>{t("needHelpTitle")}</h3>
+                                    <p>{t("needHelpDesc")}</p>
                                     <h3 className="mb-4 text-white">Tel: +(855) 23 883 886/887</h3>
-                                    <a href="#" className="btn btn-primary" data-hover="Contact Us">Contact Us</a>
+                                    <a href="/contact" className="btn btn-primary" data-hover={t("contactUsBtn")}>{t("contactUsBtn")}</a>
                                 </div>
                             </div>
 
-                            {/* ---> AIRLINE PARTNERS NOW IN SIDEBAR <--- */}
                             <div className="sidebar-widget p-4 border rounded bg-light">
                                 <h3 className="mb-3 text-primary d-flex align-items-center" style={{ fontSize: "1.25rem" }}>
                                     <span style={{ marginRight: "8px", color: "#0d6efd" }}>❖</span>
-                                    <span style={{ fontStyle: 'italic', fontWeight: 'bold' }}>Main Shipping Line</span>
+                                    <span style={{ fontStyle: 'italic', fontWeight: 'bold' }}>{t("mainShippingLineTitle")}</span>
                                 </h3>
-                                {/* 3x3 Responsive Grid for 9 Partners */}
                                 <div className="row row-cols-3 g-2 align-items-center justify-content-center bg-white p-2 rounded border">
-                                    {airlineLogos.map((airline, idx) => (
+                                    {shippingLineLogos.map((line, idx) => (
                                         <div key={idx} className="col p-2 text-center d-flex justify-content-center align-items-center" style={{ minHeight: "60px" }}>
                                             <Image
-                                                src={airline.src}
-                                                alt={airline.name}
+                                                src={line.src}
+                                                alt={line.name}
                                                 width={90}
                                                 height={45}
                                                 style={{ objectFit: 'contain', width: '100%', height: 'auto', maxHeight: '40px' }}
@@ -272,29 +280,25 @@ export default function Page() {
                                     ))}
                                 </div>
                             </div>
-                            {/* ----------------------------------------- */}
                         </div>
 
-                        {/* ========================================================= */}
-                        {/* MAIN RIGHT COLUMN */}
-                        {/* ========================================================= */}
                         <div className="col-lg-8 ps-lg-5 order-1 order-lg-2">
                             <div className="service-detail-image mb-5">
                                 <Image src="/images/img(10).jpg" alt="Ocean Freight" className="img-fluid rounded" unoptimized width={1920} height={1080} sizes="100vw" />
                             </div>
 
                             <div className="service-detail-content">
-                                <h2 className="mb-4">Sea Freight Product</h2>
-                                <p>RCS Logistics Cambodia provides reliable sea freight solutions, including FCL, LCL, and buyer consolidation services, helping customers optimize export logistics from Cambodia to global markets.</p>
+                                <h2 className="mb-4">{t("productTitle")}</h2>
+                                <p>{t("productDesc")}</p>
                                 <ul style={{ listStyleType: 'disc', paddingLeft: '13px' }}>
-                                    <li>Door-to-door service for LCL and FCL</li>
-                                    <li>Sea/Truck service from HCM to PNH</li>
-                                    <li>Customs brokerage</li>
-                                    <li>Handling of dangerous goods, project cargo and perishable goods</li>
-                                    <li>Break bulk service</li>
-                                    <li>Warehousing and storage</li>
-                                    <li>Export packaging and crating</li>
-                                    <li>Complete documentation services</li>
+                                    <li>{t("listDoorToDoor")}</li>
+                                    <li>{t("listSeaTruck")}</li>
+                                    <li>{t("listCustomsBrokerage")}</li>
+                                    <li>{t("listDangerousGoods")}</li>
+                                    <li>{t("listBreakBulk")}</li>
+                                    <li>{t("listWarehousing")}</li>
+                                    <li>{t("listPackaging")}</li>
+                                    <li>{t("listDocumentation")}</li>
                                 </ul>
 
                                 <div className="row my-5">
@@ -302,58 +306,19 @@ export default function Page() {
                                         <Image src="/images/img(2).jpg" alt="Feature" className="img-fluid rounded img-vertical-height" unoptimized width={1920} height={1080} sizes="100vw" />
                                     </div>
                                     <div className="col-md-6">
-                                        <h3 className="mb-3">Why Choose Sea Freight?</h3>
-                                        <p>Sea freight is the most cost-effective solution for moving large volumes, heavy cargo, and bulk goods globally. We offer flexible Full Container Load (FCL) and Less than Container Load (LCL) services to keep your supply chain efficient and reliable.</p>
+                                        <h3 className="mb-3">{t("whyChooseTitle")}</h3>
+                                        <p>{t("whyChooseDesc")}</p>
                                         <ul className="check-list dark-text mt-4">
-                                            <li><i className="fa-solid fa-check"></i><span>Most Cost-Effective for Large & Heavy Cargo</span></li>
-                                            <li><i className="fa-solid fa-check"></i><span>Flexible FCL (Full Container) & LCL (Shared Container) Options</span></li>
-                                            <li><i className="fa-solid fa-check"></i><span>High Carrying Capacity for Worldwide Destinations</span></li>
-                                            <li><i className="fa-solid fa-check"></i><span>Eco-Friendly Transport with Lower Carbon Emissions</span></li>
+                                            <li><i className="fa-solid fa-check"></i><span>{t("checkCostEffective")}</span></li>
+                                            <li><i className="fa-solid fa-check"></i><span>{t("checkFlexible")}</span></li>
+                                            <li><i className="fa-solid fa-check"></i><span>{t("checkCapacity")}</span></li>
+                                            <li><i className="fa-solid fa-check"></i><span>{t("checkEcoFriendly")}</span></li>
                                         </ul>
                                     </div>
                                 </div>
 
-                                <h3 className="mb-4">How It Works</h3>
-                                <p className="mb-5">Our ocean freight service is structured for end-to-end efficiency—from port pickup and container loading to customs clearance and final port-to-door delivery.</p>
-
-                                {/* <div className="accordion" id="serviceAccordion">
-                                    <div className="accordion-item">
-                                        <h2 className="accordion-header">
-                                            <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true">
-                                                1. Booking & Documentation
-                                            </button>
-                                        </h2>
-                                        <div id="collapseOne" className="accordion-collapse collapse show" data-bs-parent="#serviceAccordion">
-                                            <div className="accordion-body">
-                                                We assist you with all necessary documentation including Bill of Lading, Commercial Invoice, and Packing List to ensure smooth customs clearance.
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="accordion-item">
-                                        <h2 className="accordion-header">
-                                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
-                                                2. Cargo Collection & Loading
-                                            </button>
-                                        </h2>
-                                        <div id="collapseTwo" className="accordion-collapse collapse" data-bs-parent="#serviceAccordion">
-                                            <div className="accordion-body">
-                                                We arrange for the pickup of your goods from your warehouse or supplier and handle the secure loading into containers.
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="accordion-item">
-                                        <h2 className="accordion-header">
-                                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
-                                                3. Air Transit & Tracking
-                                            </button>
-                                        </h2>
-                                        <div id="collapseThree" className="accordion-collapse collapse" data-bs-parent="#serviceAccordion">
-                                            <div className="accordion-body">
-                                                Your cargo is shipped via our premium carrier partners. You can track your shipment in real-time using our advanced tracking system.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> */}
+                                <h3 className="mb-4">{t("howItWorksTitle")}</h3>
+                                <p className="mb-5">{t("howItWorksDesc")}</p>
 
                             </div>
                         </div>

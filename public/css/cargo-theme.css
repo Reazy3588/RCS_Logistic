@@ -3592,6 +3592,10 @@ a:hover {
   border-left: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.stats-grid-single-column {
+  grid-template-columns: 1fr;
+}
+
 .stat-card {
   padding: var(--space-2xl);
   border-right: 1px solid rgba(255, 255, 255, 0.1);
@@ -4192,4 +4196,227 @@ a:hover {
   .blog-grid {
     grid-template-columns: 1fr;
   }
+}
+
+.lang-dropdown {
+  position: relative;
+  margin-left: 12px;
+}
+
+.lang-dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.lang-dropdown-toggle:hover {
+  border-color: #2563eb;
+}
+
+.lang-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  list-style: none;
+  padding: 6px;
+  margin: 0;
+  min-width: 140px;
+  z-index: 1000;
+}
+
+.lang-dropdown-menu li button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  text-align: left;
+  cursor: pointer;
+  color: #1e293b;
+  font-size: 0.9rem;
+}
+
+.lang-dropdown-menu li button:hover {
+  background: #f1f5f9;
+}
+
+.lang-dropdown-menu li button.active {
+  background: #2563eb;
+  color: #fff;
+}
+/* On Mobile */
+/* Mobile submenu toggle button */
+.submenu-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  color: inherit;
+}
+
+@media (max-width: 991px) {
+  /* Hide any built-in arrow from the theme so only our button shows */
+  .has-child > .nav-link::after,
+  .has-child > .nav-link::before {
+    display: none !important;
+  }
+
+  .has-child {
+    position: relative !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+
+  .submenu-toggle {
+    display: block !important;
+  }
+
+  .has-child > ul {
+    display: none !important;
+    width: 100% !important;
+    flex-basis: 100% !important;
+    position: static !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .has-child.submenu-open > ul {
+    display: block !important;
+  }
+
+  .has-child.submenu-open .submenu-toggle i {
+    transform: rotate(180deg);
+  }
+
+  .submenu-toggle i {
+    transition: transform 0.2s ease;
+  }
+}
+/* Apply Khmer font to text elements only, NOT icons */
+.font-khmer {
+  font-family: var(--font-khmer), "Inter", sans-serif;
+}
+
+.font-khmer
+  :where(
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    span,
+    a,
+    li,
+    label,
+    input,
+    textarea,
+    select,
+    button,
+    div
+  ):not([class*="fa-"]):not(i) {
+  font-family: var(--font-khmer), "Inter", sans-serif;
+}
+
+/* Extra line-height needed for Khmer stacked diacritics/subscripts to avoid clipping */
+.font-khmer,
+.font-khmer p,
+.font-khmer li {
+  line-height: 1.4 !important;
+}
+
+.font-khmer h1,
+.font-khmer h2,
+.font-khmer h3,
+.font-khmer h4 {
+  line-height: 1.15 !important;
+}
+
+.font-khmer .hero-title {
+  line-height: 1.15 !important;
+}
+
+.font-khmer .hero-title .title-line {
+  display: block;
+  padding-bottom: 0.35em; /* small buffer only for subscript vowels, not a full extra line */
+}
+
+/* Khmer needs more vertical room than Latin text, especially on narrow screens. */
+.font-khmer .hero-title {
+  letter-spacing: 0;
+}
+
+.font-khmer .hero-description {
+  line-height: 1.8 !important;
+}
+
+@media (max-width: 576px) {
+  .font-khmer .hero-title {
+    font-size: clamp(2.35rem, 10vw, 3rem);
+    line-height: 1.3 !important;
+  }
+
+  .font-khmer .hero-title .title-line {
+    padding-bottom: 0.24em;
+  }
+
+  .font-khmer .hero-description {
+    font-size: 1.125rem;
+    line-height: 1.85 !important;
+  }
+}
+/* ============================================
+   NAV ACTIVE STATES
+   ============================================ */
+
+/* Top-level nav links (Home, Contact) */
+.main-nav .nav-menu > li > .nav-link.active {
+  color: #084f90;
+  font-weight: 700;
+}
+
+/* Parent li with dropdown (Services, Company) when a child page is active */
+.main-nav .nav-menu > li.has-child.active > .nav-link {
+  color: #084f90;
+  font-weight: 700;
+}
+
+/* Submenu items (Air Freight, Sea Freight, About Us, Our Fleet...) */
+.main-nav .nav-menu li ul li a.active {
+  color: #084f90;
+  font-weight: 600;
+  background: rgba(37, 99, 235, 0.08);
+}
+
+/* Sidebar "Our Services" list (#extra-content .ul-check) */
+.ul-check li a.active {
+  color: #084f90;
+  font-weight: 700;
+  background: rgba(37, 99, 235, 0.08);
+  outline: none;
+}
+
+/* Remove default browser focus outline that's showing instead of our style */
+.main-nav a:focus,
+.ul-check a:focus,
+.cat-list a:focus {
+  outline: none;
 }
