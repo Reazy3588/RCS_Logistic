@@ -308,7 +308,7 @@ export default function Header() {
             </nav>
 
             <div className="header-actions d-flex align-items-center gap-4">
-              <LanguageSwitcher />
+              {/* <LanguageSwitcher /> */}
               <Link href={headerCtaHref} className="btn-header" data-hover={headerCtaLabel}><span>{headerCtaLabel}</span></Link>
               <div id="btn-extra" className="d-none d-lg-block">
                 <span></span>

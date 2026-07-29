@@ -114,7 +114,7 @@ export default function ClientEnhancements() {
     document.body.classList.add("loaded");
     document.body.classList.remove("mobile-menu-open");
 
-    appState.__cargonzPreloaderFinalizeTimer = window.setTimeout(() => {
+   appState.__cargonzPreloaderFinalizeTimer = window.setTimeout(() => {
       appState.__cargonzNavigationInProgress = false;
       if (sitePreloader) {
         sitePreloader.style.display = "none";
